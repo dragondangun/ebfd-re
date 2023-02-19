@@ -4,8 +4,9 @@
 	using Graphics.Shaders;
 	using OpenTK.Graphics.OpenGL4;
 	using OpenTK.Mathematics;
+    using System;
 
-	public class XbfShader : Shader<XbfShader.XbfShaderParameters>
+    public class XbfShader : Shader<XbfShader.XbfShaderParameters>
 	{
 		public class XbfShaderParameters : ShaderParameters<XbfShader>
 		{
@@ -88,12 +89,17 @@
 
 		protected override void Bind(Matrix4 model, Matrix4 view, Matrix4 projection, XbfShaderParameters parameters)
 		{
-			base.Bind(model, view, projection, parameters);
-
-			var normal = Matrix4.Transpose(Matrix4.Invert(view * model));
-			GL.UniformMatrix4(this.normal, false, ref normal);
-			GL.Uniform3(this.light, Vector3.TransformVector(-Vector3.UnitZ, view));
-			GL.BindTexture(TextureTarget.Texture2D, parameters.Texture);
+			try {
+				base.Bind(model, view, projection, parameters);
+				var normal = Matrix4.Transpose(Matrix4.Invert(view * model));
+				GL.UniformMatrix4(this.normal, false, ref normal);
+				GL.Uniform3(this.light, Vector3.TransformVector(-Vector3.UnitZ, view));
+				GL.BindTexture(TextureTarget.Texture2D, parameters.Texture);
+			}
+			catch(Exception ex) {
+				//Console.WriteLine(ex.Message);
+				throw;
+            }
 		}
 
 		public override int CreateVertexArrayObject()

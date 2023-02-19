@@ -57,16 +57,29 @@
 
 		protected virtual void Bind(Matrix4 model, Matrix4 view, Matrix4 projection, T parameters)
 		{
-			GL.UseProgram(this.Program);
+			try {
 
-			GL.UniformMatrix4(this.model, false, ref model);
-			GL.UniformMatrix4(this.view, false, ref view);
-			GL.UniformMatrix4(this.projection, false, ref projection);
+				GL.UseProgram(this.Program);
+
+				GL.UniformMatrix4(this.model, false, ref model);
+				GL.UniformMatrix4(this.view, false, ref view);
+				GL.UniformMatrix4(this.projection, false, ref projection);
+			}
+			catch(Exception ex) {
+				//Console.WriteLine(ex.Message);
+				throw;
+            }
 		}
 
 		public void Bind(Matrix4 model, Matrix4 view, Matrix4 projection, IShaderParameters parameters)
 		{
-			this.Bind(model, view, projection, (parameters as T)!);
+			try {
+				this.Bind(model, view, projection, (parameters as T)!);
+			}
+			catch(Exception ex) {
+				//Console.WriteLine(ex.Message);
+				throw;
+			}
 		}
 
 		public virtual int CreateVertexArrayObject()

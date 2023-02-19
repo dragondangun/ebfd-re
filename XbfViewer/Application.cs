@@ -21,6 +21,7 @@ namespace XbfViewer
 		private string? model;
 		private XbfMesh? mesh;
 		private MeshInstance? meshInstance;
+		private bool stop = false;
 
 		public Application()
 			: base(GameWindowSettings.Default, NativeWindowSettings.Default)
@@ -73,8 +74,10 @@ namespace XbfViewer
 				this.meshInstance.Update((float) args.Time);
 			}
 
-			if (this.KeyboardState.IsKeyPressed(Keys.Enter) || this.model == null)
+			if (this.KeyboardState.IsKeyPressed(Keys.Enter) || this.model == null) {
 				this.LoadXbf(this.models[this.model == null ? 0 : (this.models.IndexOf(this.model) + 1) % this.models.Count]);
+				stop = false;
+            }
 		}
 
 		private void LoadXbf(string model)
@@ -91,11 +94,22 @@ namespace XbfViewer
 
 		protected override void OnRenderFrame(FrameEventArgs args)
 		{
+			if(stop)
+				return;
+
+
 			GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
 			this.camera.Update();
 
-			this.meshInstance?.Draw(this.camera);
+			try {
+				this.meshInstance?.Draw(this.camera);
+			}
+			catch(Exception ex) {
+				Console.WriteLine(ex.Message);
+				stop = true;
+				return;
+			}
 
 			this.Context.SwapBuffers();
 		}

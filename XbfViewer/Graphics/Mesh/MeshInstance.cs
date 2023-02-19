@@ -38,7 +38,12 @@ namespace XbfViewer.Graphics.Mesh
 
 		public void Draw(Camera camera)
 		{
-			this.mesh.Draw(camera, this.World, this.frame);
+            try {
+				this.mesh.Draw(camera, this.World, this.frame);
+            }
+			catch(Exception ex) {
+				throw;
+            }
 		}
 	}
 }

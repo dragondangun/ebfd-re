@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "EbfdExtractor": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Westwood\\Emperor\\DATA"
+    }
+  }
+}

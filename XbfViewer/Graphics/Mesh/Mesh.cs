@@ -62,7 +62,12 @@
 
 			if (this.NumIndices > 0 && this.ShaderParameters != null)
 			{
-				this.ShaderParameters.Bind(model, camera.View, camera.Projection);
+                try {
+					this.ShaderParameters.Bind(model, camera.View, camera.Projection);
+                }
+                catch {
+					throw;
+                }
 
 				GL.BindVertexArray(this.VertexArrayObject);
 				GL.BindBuffer(BufferTarget.ArrayBuffer, this.VertexBufferObject);
@@ -74,8 +79,14 @@
 			if (this.Children == null)
 				return;
 
-			foreach (var child in this.Children)
-				child.Draw(camera, model, frame);
+			try {
+
+				foreach(var child in this.Children)
+					child.Draw(camera, model, frame);
+			}
+            catch (Exception ex) {
+				throw;
+            }
 		}
 
 		public virtual void Dispose()
